@@ -6,6 +6,7 @@
 # Yelp API
 # homepage: https://www.yelp.com/developers
 # python client library: https://github.com/Yelp/yelp-python
+# yelp search params: https://www.yelp.com/developers/documentation/v2/search_api
 
 import eventful
 import yelp

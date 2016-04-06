@@ -1,0 +1,36 @@
+body, section, main, nav, header, footer {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
+h1, h2, h3, h4, h5, p, li {
+    color: black;
+    font-family: "Arial";
+}
+
+body {
+    background-color: teal;
+}
+
+
+section#params {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+input {
+    
+}
+
+header {
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+}
