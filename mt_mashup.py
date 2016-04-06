@@ -15,3 +15,17 @@
     "token_secret": "AQLQnKJA7VYw4XlVIMK7hYzSwDo"
 }
 """
+
+
+#import yelp
+import eventful
+
+
+api = eventful.API('hLdVs3LKGBLbjMfd')
+
+# If you need to log in:
+# api.login('username', 'password')
+
+events = api.call('/events/search', q='concert', l='Decorah')
+for event in events['events']['event']:
+    print (event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
