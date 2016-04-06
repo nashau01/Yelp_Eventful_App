@@ -7,18 +7,28 @@
 # homepage: https://www.yelp.com/developers
 # python client library: https://github.com/Yelp/yelp-python
 # Keys:
-"""
-{
-    "consumer_key": "mvC1SY7wAUx_RPlVhG-fIw",
-    "consumer_secret": "vkqWVoowxsWkUu7KU0t2Pj3qY1k",
-    "token": "syYEIdwvGt-uLGdgVmu9ZsQfE98CROe4",
-    "token_secret": "AQLQnKJA7VYw4XlVIMK7hYzSwDo"
-}
-"""
+
+
+
 
 
 #import yelp
 import eventful
+import yelp
+from yelp.client import Client
+from yelp.oauth1_authenticator import Oauth1Authenticator
+import io
+import json
+
+
+# read API keys
+with io.open('config_secret.json') as cred:
+    creds = json.load(cred)
+    auth = Oauth1Authenticator(**creds)
+    client = Client(auth)
+
+
+client = Client(auth)
 
 
 api = eventful.API('hLdVs3LKGBLbjMfd')
@@ -29,3 +39,14 @@ api = eventful.API('hLdVs3LKGBLbjMfd')
 events = api.call('/events/search', q='concert', l='Decorah')
 for event in events['events']['event']:
     print (event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
+
+
+params = {
+    'term': 'food',
+    'lang': 'en'
+}
+
+response = client.search('Decorah', **params)
+
+
+print(response.businesses[1].name)
