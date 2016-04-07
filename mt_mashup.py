@@ -15,7 +15,30 @@ from yelp.oauth1_authenticator import Oauth1Authenticator
 import io
 import json
 import ye_schedule
+from datetime import date
 
+parameters = {}
+
+parameters["both"] = {
+    "num_schedule_results" : 0,
+    "activity_type" : "",
+    "location_center" : (0,0), #(longitude,latitude)
+    "location_radius" : 0,
+    "date" : None,  #date(),
+    "time_frame" : (0,0) #(min_start_time, max_end_time)
+}
+
+parameters["eventful"] = {
+    "keywords" : [""],
+    "category" : "",
+    "sort_order" : ""
+}
+
+parameters["yelp"] = {
+    "term" : "", #(keywords, e.g. "food", "restaurants")
+    "sort" : None, #(similar to eventful sort order, e.g. "Best Matched", "Highest Rated")
+    "category_filter" : "" #(internal, based on type of activity/entertainment)
+}
 
 #activate eventful API with key
 api = eventful.API('hLdVs3LKGBLbjMfd')
@@ -36,8 +59,7 @@ client = Client(auth)
 #use of eventful API
 events = api.call('/events/search', q='concert', l='Decorah')    #search eventful via API
 for event in events['events']['event']:
-    print (event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
-
+    print(event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
 
 #use of yelp API
 params = {
