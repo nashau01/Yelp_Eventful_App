@@ -1,0 +1,17 @@
+Both:
+    number of schedule results
+    type of activity/entertainment (generic since yelp has some entertainment business results e.g. "Bungee Jumping", "Disc Golf")
+    center location
+    distance/radius
+    date
+    time frame
+
+Eventful:
+    keywords
+    category
+    sort_order (user or internal option)
+
+Yelp:
+    term (keywords, e.g. "food", "restaurants")
+    sort (similar to eventful sort order, e.g. "Best Matched", "Highest Rated")
+    category_filter (internal, based on type of activity/entertainment)
