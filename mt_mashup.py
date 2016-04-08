@@ -17,19 +17,6 @@ import json
 import ye_schedule
 from flask import Flask, request, render_template, redirect
 
-def search_yelp(location, dtype):
-    with io.open('config_secret.json') as cred:       #authentication keys are stored in secret json file which is ignored in the .gitignore file
-        creds = json.load(cred)
-    auth = Oauth1Authenticator(**creds)
-    client = Client(auth)
-
-    params = {
-    
-    'term': dtype,
-    'lang': 'en',
-    }
-    
-    return client.search(location, **params)      #pass the params
 
 
 parameters = {}
@@ -55,15 +42,30 @@ parameters["yelp"] = {
     "category_filter" : "" #(internal, based on type of activity/entertainment)
 }
 
-def search_eventful(etype, location):
+
+def search_yelp():
+    with io.open('config_secret.json') as cred:       #authentication keys are stored in secret json file which is ignored in the .gitignore file
+        creds = json.load(cred)
+    auth = Oauth1Authenticator(**creds)
+    client = Client(auth)
+    
+    params = {
+    
+    'term': 'food',
+    'lang': 'en',
+    }
+    
+    return client.search(location, **params)      #pass the params
+
+def search_eventful():
     api = eventful.API('hLdVs3LKGBLbjMfd')
-    return api.call('/events/search', q=etype, l=location)    #search eventful via API
+    return api.call('/events/search', q='concerts', l='Decorah')    #search eventful via API
     for event in events['events']['event']:
         print("here", event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
 
-def get_results(location, dtype, etype, date, distance, eprice, dprice):
-    yelp_results = search_yelp(location, dtype)
-    eventful_results = search_eventful(etype, location)
+def get_results():
+    yelp_results = search_yelp()
+    eventful_results = search_eventful()
     print(yelp_results)
     print(eventful_results)
 
