@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% block results %}
+
+<p>Hello World</p>
+<p>{{ variable }}</p>
+
+<table>
+
+{% for possibility in possibilities %}
+    <tr>
+        <td>{{possibility.event}}</td>
+        <td>{{ possibility.dining}}</td>
+        <td>{{ possibility.date}}</td>
+        <td>{{ possibility.time}}</td>
+    </tr>
+{% else %}
+<tr><td>Sorry. No Results.</td></tr>
+{% endfor %}
+<table>
+    
+<p>Hello Again</p>
+    
+{% endblock %}
+
