@@ -15,37 +15,70 @@ from yelp.oauth1_authenticator import Oauth1Authenticator
 import io
 import json
 import ye_schedule
+from flask import Flask, request, render_template, redirect
 
-
-#activate eventful API with key
-api = eventful.API('hLdVs3LKGBLbjMfd')
-
-# read API keys for yelp
-with io.open('config_secret.json') as cred:       #authentication keys are stored in secret json file which is ignored in the .gitignore file
-    creds = json.load(cred)
+def search_yelp(location, dtype):
+    with io.open('config_secret.json') as cred:       #authentication keys are stored in secret json file which is ignored in the .gitignore file
+        creds = json.load(cred)
     auth = Oauth1Authenticator(**creds)
     client = Client(auth)
 
-client = Client(auth)
+    params = {
+    
+    'term': dtype,
+    'lang': 'en',
+    }
+    
+    return client.search(location, **params)      #pass the params
+
+def search_eventful(etype, location):
+    api = eventful.API('hLdVs3LKGBLbjMfd')
+    return api.call('/events/search', q=etype, l=location)    #search eventful via API
+    for event in events['events']['event']:
+        print("here", event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
+
+def get_results(location, dtype, etype, date, distance, eprice, dprice):
+    yelp_results = search_yelp(location, dtype)
+    eventful_results = search_eventful(etype, location)
+    print(yelp_results)
+    print(eventful_results)
+
+app = Flask(__name__)
+
+@app.route('/')
+def landing_page():
+    return render_template("index.html")
+
+@app.route('/reset', methods = ['POST'])
+def reset():
+    return render_template("index.html")
+
+@app.route('/search', methods = ['GET', 'POST'])
+def my_form_post():
+    location = request.form['location']
+    etype = request.form['etype']
+    dtype = request.form['dtype']
+    distance = request.form['distance']
+    date = request.form['date']
+    eprice = request.form['eprice']
+    dprice = request.form['dprice']
+    #results = get_results(location, dtype, etype, date, distance, eprice, dprice)
+    print(location, etype, dtype, distance, date, eprice, dprice)
+
+    return redirect('/')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
-# If you need to log in:
-# api.login('username', 'password')
 
 
-#use of eventful API
-events = api.call('/events/search', q='concert', l='Decorah')    #search eventful via API
-for event in events['events']['event']:
-    print (event['title'], "," , event['venue_name'], ",", event['city_name'], ",", event['start_time'])
 
 
-#use of yelp API
-params = {
-    'term': 'food',
-    'lang': 'en'
-}
 
-response = client.search('Decorah', **params)      #pass the params
-print(response.businesses[0].name)
+
+
+
+
 
 

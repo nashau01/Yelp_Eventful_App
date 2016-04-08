@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <title>Friday Night Sites</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
+    </head>
+    <body>
+        <header>
+            <h1>Friday Night Sites</h1>
+        </header>
+        <div class = "half">
+            <form action="/reset" method = "POST">
+                <input type="submit" value="Reset">
+            </form>
+        </div>
+                
+        <div class = "half">
+            <form action="/search" method = "POST">
+                <table>
+                    <tr><td>Location:</td><td><input type="text" name="location" value="Decorah, IA"></td></tr>
+                    <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value="Baseball"></td></tr>
+                    <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value = "Chinese"></td></tr>
+                    <tr><td>Maximum Distance:</td><td> <input type="text" name="distance" value="10"></td></tr>
+                    <tr><td>Date:</td><td><input type="date" name="date" min="2016-01-01" value="2016-04-30"></td></tr>
+                    <tr><td>Dining Price Range:</td><td> <select name = "dprice">
+                        <option value="$$$">$$$</option>
+                        <option value="$$">$$</option>
+                        <option value="$">$</option>
+                    </select></td></tr>
+                    <tr><td>Event Price Range:</td><td> <select name = "eprice">
+                        <option value="$$$">$$$</option>
+                        <option value="$$">$$</option>
+                        <option value="$">$</option>
+                        <option value="Free">Free</option>
+                    </select></td></tr>
+                    <table>
+                        <input type="submit" value="Submit">
+                    </form>
+        </div>
+        <div class = "half">
+            <p>some text</p>
+        </div>
+    </body>
+<html>
+        
+        
