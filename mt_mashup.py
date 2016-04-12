@@ -17,7 +17,7 @@ from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 import io
 import json
-import ye_schedule
+from ye_schedule import *
 from flask import Flask, request, render_template, redirect
 
 
@@ -30,21 +30,28 @@ def search_yelp():
     client = Client(auth)
 
     results = client.search(parameters["both"]["location_center"], **parameters["yelp"])      #pass the params
-    print(results)
+    #print(results)
+    return results
 
 def search_eventful():
     api = eventful.API('hLdVs3LKGBLbjMfd')        #activate key
-    events = api.call('/events/search', q='beer', l='decorah')
+    events = api.call('/events/search', q="music", l="San Diego")
+
     for event in events['events']['event']:
-        print(event['title'], event['venue_name'])
+        print (("%s at %s") % (event['title'], event['venue_name']))
+
+    print(events['events']['event'])
+    return events['events']['event']
 
 def get_results():
-    #yelp_results = search_yelp()
-    #eventful_results = search_eventful()
-    # add code to parse results with ye_schedule module
-    # return results
-    pass
+    yelp_results = search_yelp()
+    eventful_results = search_eventful()
 
+    # parse results with ye_schedule module
+
+    schedule_maker = ScheduleMaker(yelp_results, eventful_results)
+
+    return schedule_maker.options_list
 
 
 #### Initialize Parameter Dictionaries #####
@@ -104,12 +111,24 @@ def my_form_post():
             'date' : '2016-04-15',
             'time' : '6:00pm',
             'cost' : '$$$'
-        }
+    }
     possibilities = []
     possibilities.append(sample_dict)
-    
+
+    options_list = get_results()
+
+    print("size of options_list = " + str(len(options_list)))
+
+    for an_option in options_list:
+        a_dict = {}
+        a_dict['event'] = an_option.activities_list[0].name
+        a_dict['dining'] = an_option.activities_list[1].name
+        a_dict['date'] = an_option.activities_list[0].date
+        a_dict['time'] = an_option.activities_list[0].start_time
+        a_dict['cost'] = '?'
+        possibilities.append(a_dict)
+
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
-    get_results()
     return render_template("results.html", possibilities=possibilities)#redirect('/')
 
 if __name__ == '__main__':
