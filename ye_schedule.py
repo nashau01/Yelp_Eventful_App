@@ -10,7 +10,6 @@ class Location:
         pass
 
 
-#psuedo code, must be alligned with yelp and eventful search result data types
 class Activity:
     def __init__(self, object, type_str):
         self.type_str = type_str
@@ -28,8 +27,8 @@ class Activity:
             self.start_time = object['start_time']
             self.end_time = object['stop_time']
 
-
-
+    def __str__(self):
+        return str(self.name) + ", " + str(self.location)
 
 
 class ScheduleOption:
@@ -42,6 +41,9 @@ class ScheduleOption:
         #find the score (weight)
         pass
 
+    def __str__(self):
+        return "" + str(self.activities_list[0]) + ", " + str(self.activity_list[1].name)
+
 
 class ScheduleMaker:
     def __init__(self, yelp_results, eventful_results):
@@ -49,6 +51,7 @@ class ScheduleMaker:
         self.eventful_results = eventful_results
         self.options_list = []
         self.findScheduleOptions(999)
+        print("initialized a ScheduleMaker object")
 
     def findScheduleOptions(self, numOptions):
         options_list = []
@@ -58,6 +61,7 @@ class ScheduleMaker:
             for j in range(NUM_DINING_OPTIONS_FOR_EACH_EVENT):
                 dining = Activity(self.yelp_results.businesses[j], "yelp")
                 activities_list = [event, dining]
+                print("appending activities: " + str(activities_list[0]) + " " + str(activities_list[1]))
                 options_list.append(ScheduleOption(activities_list))
 
     #Not a priority, but important
