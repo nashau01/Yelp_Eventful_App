@@ -20,6 +20,7 @@ from ye_schedule import *
 from flask import Flask, request, render_template, redirect
 
 
+
 ##### Called Functions #####
 
 def search_yelp():
@@ -30,12 +31,15 @@ def search_yelp():
     client = Client(auth)
 
     results = client.search(parameters["both"]["location_center"], **parameters["yelp"])      #pass the params
-    #print(results)
     return results
 
 def search_eventful():
     api = eventful.API('hLdVs3LKGBLbjMfd')        #activate key
+
     events = api.call('/events/search', keywords=parameters["eventful"]["keywords"], location=parameters["both"]["location_center"], date=parameters["both"]["date"], )
+    #for event in events['events']['event']:
+    #    print (("%s at %s") % (event['title'], event['venue_name']))
+
 
     return events['events']['event']
 
@@ -45,12 +49,8 @@ def get_results():
 
     # parse results with ye_schedule module
 
-    print("size of yelp results is: {}".format(len(yelp_results.businesses)))
-    print("size of eventful results is: {}".format(len(eventful_results)))
+    schedule_maker = ScheduleMaker(yelp_results, eventful_results, 5, 4)
 
-    schedule_maker = ScheduleMaker(yelp_results, eventful_results)
-
-    print("size of options list before returning in get_results is: {}".format(len(schedule_maker.options_list)))
     return schedule_maker.options_list
 
 #### Initialize Parameter Dictionaries #####
@@ -84,7 +84,6 @@ parameters["yelp"] = {
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def landing_page():
     return render_template("index.html")
@@ -110,7 +109,17 @@ def my_form_post():
     """
     sample_dict = {
             'event' : 'Baseball Game',
-            'dining' : [{'name' : 'Waffle House', 'address' : '106 North Ave., Minneapolis, MN', 'price' : '$', 'lat' : 44.968046, 'lng' : -94.420307}, {'name' : 'Perkin\'s', 'address' :'3000 Busy Rd., Minneapolis, MN', 'price' : '$$', 'lat' : 44.33328, 'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}],
+            'dining' : [{'name' : 'Waffle House',
+                            'address' : '106 North Ave., Minneapolis, MN',
+                            'price' : '$',
+                            'lat' : 44.968046,
+                            'lng' : -94.420307
+                        },
+                        {'name' : 'Perkin\'s',
+                        'address' :'3000 Busy Rd., Minneapolis, MN',
+                        'price' : '$$',
+                        'lat' : 44.33328,
+                        'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}],
             'date' : '2016-04-15',
             'lat' : 44.92057,
             'lng' : -93.44786,
@@ -157,14 +166,21 @@ def my_form_post():
     count = 1
     for an_option in options_list:
         a_dict = {}
-        a_dict['event'] = an_option.activities_list[0].name
-        a_dict['dining'] = [{'name' : 'Waffle House', 'address' : '106 North Ave., Minneapolis, MN', 'price' : '$', 'lat' : 44.968046, 'lng' : -94.420307}, {'name' : 'Perkin\'s', 'address' :'3000 Busy Rd., Minneapolis, MN', 'price' : '$$', 'lat' : 44.33328, 'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}]#an_option.activities_list[1].name
-        
+        a_dict['event'] = an_option.event_activity.name
+        a_dict['dining'] = []
+        for a_dining_option in an_option.dining_activities:
+            a_dining_dict = {}
+            a_dining_dict['name'] = a_dining_option.name
+            a_dining_dict['address'] = "unimplemented"
+            a_dining_dict['lat'] = "unimplemented"
+            a_dining_dict['lng'] = "unimplemented"
+            a_dict['dining'].append(a_dining_dict)
+
         """ To implement date: assign the date attribute in the Activity constructor
         based on the format specified (by the API docs) for the date in a yelp/eventful result object
         """
         a_dict['date'] = "unimplemented"
-        a_dict['time'] = an_option.activities_list[0].start_time
+        a_dict['time'] = an_option.event_activity.start_time
         a_dict['cost'] = '?'
         a_dict['venue'] = "unimplemented"
         a_dict['address'] = "unimplemented"
@@ -186,18 +202,13 @@ def my_form_post():
             count += 1   #count needs to increment twice to implement google maps 
         #"""
         count += 1
-        possibilities.append(a_dict)
 
-    print("size of possibilities is: {}", len(possibilities))
+        possibilities.append(a_dict)
 
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
     return render_template("results.html", possibilities=possibilities)#redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
 
 
