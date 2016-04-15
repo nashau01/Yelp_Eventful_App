@@ -33,51 +33,32 @@ def search_yelp():
     client = Client(auth)
 
     results = client.search(parameters["both"]["location_center"], **parameters["yelp"])      #pass the params
-    print(results)
+    #print(results)
+    return results
 
 def search_eventful():
     api = eventful.API('hLdVs3LKGBLbjMfd')        #activate key
-    events = api.call('/events/search', q='beer', l='decorah')
+    events = api.call('/events/search', q="music", l="San Diego")
+
     for event in events['events']['event']:
-        print(event['title'], event['venue_name'])
+        print (("%s at %s") % (event['title'], event['venue_name']))
+
+    print(events['events']['event'])
+    return events['events']['event']
 
 def get_results():
-    #yelp_results = search_yelp()
-    #eventful_results = search_eventful()
-    # add code to parse results with ye_schedule module
-    # return results
-    pass
+    yelp_results = search_yelp()
+    eventful_results = search_eventful()
 
+    # parse results with ye_schedule module
 
-def unique(scount):
-    clist = scount.split()
-    print(clist)
-    so = ""
-    for l in clist:
-        if l == "0":
-            so += "zero"
-        elif l == "1":
-            so += "one"
-        elif l == "2":
-            so += "two"
-        elif l == "3":
-            so += "three"
-        elif l == "4":
-            so += "four"
-        elif l == "5":
-            so += "five"
-        elif l == "6":
-            so += "six"
-        elif l == "7":
-            so += "seven"
-        elif l == "8":
-            so += "eight"
-        elif l == "9":
-            so += "nine"
-        print("so:", so)
+    print("size of yelp results is: {}".format(len(yelp_results.businesses)))
+    print("size of eventful results is: {}".format(len(eventful_results)))
 
-    return so
+    schedule_maker = ScheduleMaker(yelp_results, eventful_results)
 
+    print("size of options list before returning in get_results is: {}".format(len(schedule_maker.options_list)))
+    return schedule_maker.options_list
 
 #### Initialize Parameter Dictionaries #####
 
@@ -134,7 +115,7 @@ def my_form_post():
     parameters["eventful"]["price_range"] = request.form['eprice']
     parameters["yelp"]["price_range"] = request.form['dprice']
     parameters["both"]["location_center"] = request.form['location']
-    
+    """
     sample_dict = {
             'event' : 'Baseball Game',
             'dining' : [{'name' : 'Waffle House', 'address' : '106 North Ave., Minneapolis, MN', 'price' : '$', 'lat' : 44.968046, 'lng' : -94.420307}, {'name' : 'Perkin\'s', 'address' :'3000 Busy Rd., Minneapolis, MN', 'price' : '$$', 'lat' : 44.33328, 'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}],
@@ -148,7 +129,7 @@ def my_form_post():
             'description' : "Baseball is a bat-and-ball game played between two teams of nine players each who take turns batting and fielding.The batting team attempts to score runs by hitting a ball that is thrown by the pitcher with a bat swung by the batter, then running counter-clockwise around a series of four bases: first, second, third, and home plate. A run is scored when a player advances around the bases and returns to home plate.Players on the batting team take turns hitting against the pitcher of the fielding team, which tries to prevent runs by getting hitters out in any of several ways. A player on the batting team who reaches a base safely can later attempt to advance to subsequent bases during teammates' turns batting, such as on a hit or by other means. The teams switch between batting and fielding whenever the fielding team records three outs. One turn batting for both teams, beginning with the visiting team, constitutes an inning. A game comprises nine innings, and the team with the greater number of runs at the end of the game wins. Baseball is the only major team sport in America with no game clock, although almost all games end in the ninth inning.Evolving from older bat-and-ball games, an early form of baseball was being played in England by the mid-18th century. This game was brought by immigrants to North America, where the modern version developed. By the late 19th century, baseball was widely recognized as the national sport of the United States. Baseball is now popular in North America and parts of Central and South America, the Caribbean, and East Asia.  In the United States and Canada, professional Major League Baseball (MLB) teams are divided into the National League (NL) and American League (AL), each with three divisions: East, West, and Central. The major league champion is determined by playoffs that culminate in the World Series. The top level of play is similarly split in Japan between the Central and Pacific Leagues and in Cuba between the West League and East League."
             
             }
-
+   
     possibilities = []
     possibilities.append(sample_dict)
 
@@ -176,13 +157,34 @@ def my_form_post():
         count += 1
         print(count)
         print(dict['id'])
+        """
+    
+    
 
-    
-    for dict in possibilities:
-        print(dict['id'])
-    
+#'cost' : '$$$'
+# }
+    possibilities = []
+    #possibilities.append(sample_dict)
+
+    options_list = get_results()
+
+    print("size of options_list = " + str(len(options_list)))
+
+    for an_option in options_list:
+        a_dict = {}
+        a_dict['event'] = an_option.activities_list[0].name
+        a_dict['dining'] = an_option.activities_list[1].name
+        """ To implement date: assign the date attribute in the Activity constructor
+        based on the format specified (by the API docs) for the date in a yelp/eventful result object
+        """
+        a_dict['date'] = "unimplemented"
+        a_dict['time'] = an_option.activities_list[0].start_time
+        a_dict['cost'] = '?'
+        possibilities.append(a_dict)
+
+    print("size of possibilities is: {}", len(possibilities))
+
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
-    get_results()
     return render_template("results.html", possibilities=possibilities)#redirect('/')
 
 if __name__ == '__main__':
