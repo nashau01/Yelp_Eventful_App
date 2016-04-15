@@ -20,8 +20,7 @@ import io
 import json
 from ye_schedule import *
 from flask import Flask, request, render_template, redirect
-from flask_googlemaps import GoogleMaps
-from flask_googlemaps import Map
+
 
 
 ##### Called Functions #####
@@ -50,7 +49,7 @@ def get_results():
 
     # parse results with ye_schedule module
 
-    schedule_maker = ScheduleMaker(yelp_results, eventful_results)
+    schedule_maker = ScheduleMaker(yelp_results, eventful_results, 5, 4)
 
     return schedule_maker.options_list
 
@@ -87,7 +86,6 @@ parameters["yelp"] = {
 ##### App Control #####
 
 app = Flask(__name__)
-GoogleMaps(app)
 
 @app.route('/')
 def landing_page():
@@ -112,7 +110,17 @@ def my_form_post():
     """
     sample_dict = {
             'event' : 'Baseball Game',
-            'dining' : [{'name' : 'Waffle House', 'address' : '106 North Ave., Minneapolis, MN', 'price' : '$', 'lat' : 44.968046, 'lng' : -94.420307}, {'name' : 'Perkin\'s', 'address' :'3000 Busy Rd., Minneapolis, MN', 'price' : '$$', 'lat' : 44.33328, 'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}],
+            'dining' : [{'name' : 'Waffle House',
+                            'address' : '106 North Ave., Minneapolis, MN',
+                            'price' : '$',
+                            'lat' : 44.968046,
+                            'lng' : -94.420307
+                        },
+                        {'name' : 'Perkin\'s',
+                        'address' :'3000 Busy Rd., Minneapolis, MN',
+                        'price' : '$$',
+                        'lat' : 44.33328,
+                        'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}],
             'date' : '2016-04-15',
             'lat' : 44.92057,
             'lng' : -93.44786,
@@ -164,14 +172,25 @@ def my_form_post():
 
     for an_option in options_list:
         a_dict = {}
-        a_dict['event'] = an_option.activities_list[0].name
-        a_dict['dining'] = an_option.activities_list[1].name
+        a_dict['event'] = an_option.event_activity.name
+        a_dict['dining'] = []
+        for a_dining_option in an_option.dining_activities:
+            a_dining_dict = {}
+            a_dining_dict['name'] = a_dining_option.name
+            a_dining_dict['address'] = "unimplemented"
+            a_dining_dict['lat'] = "unimplemented"
+            a_dining_dict['lng'] = "unimplemented"
+            a_dict['dining'].append(a_dining_dict)
+
         """ To implement date: assign the date attribute in the Activity constructor
         based on the format specified (by the API docs) for the date in a yelp/eventful result object
         """
         a_dict['date'] = "unimplemented"
-        a_dict['time'] = an_option.activities_list[0].start_time
+        a_dict['time'] = an_option.event_activity.start_time
         a_dict['cost'] = '?'
+        a_dict['venue'] = "unimplemented"
+        a_dict['city'] = "unimplemented"
+        a_dict['description'] = "unimplemented"
         possibilities.append(a_dict)
 
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
@@ -179,9 +198,5 @@ def my_form_post():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
 
 
