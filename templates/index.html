@@ -4,6 +4,10 @@
     <head>
         <title>Friday Night Sites</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCGDa_1ERiA7foJjGsELWkHyZ1_SQTiXg
+                &libraries=visualization&callback=initMap">
+                </script>
+</script>
     </head>
     <body>
         <header>
@@ -17,12 +21,12 @@
                 
         <div class = "half">
             <form action="/search" method = "POST">
-                <table>
-                    <tr><td>Location:</td><td><input type="text" name="location" value="Decorah, IA"></td></tr>
-                    <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value="Baseball"></td></tr>
-                    <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value = "Chinese"></td></tr>
-                    <tr><td>Maximum Distance:</td><td> <input type="text" name="distance" value="10"></td></tr>
-                    <tr><td>Date:</td><td><input type="date" name="date" min="2016-01-01" value="2016-04-30"></td></tr>
+                <table class = "params">
+                    <tr><td>Location:</td><td><input type="text" name="location" value="e.g. Decorah, IA"></td></tr>
+                    <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value="e.g. Baseball"></td></tr>
+                    <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value = "e.g. Chinese"></td></tr>
+                    <tr><td>Maximum Distance (Miles):</td><td> <input type="text" name="distance" value="e.g. 10"></td></tr>
+                    <tr><td>Date:</td><td><input type="date" name="date" min="2016-01-01" value="e.g. 2016-04-30"></td></tr>
                     <tr><td>Dining Price Range:</td><td> <select name = "dprice">
                         <option value="$$$">$$$</option>
                         <option value="$$">$$</option>
@@ -33,17 +37,31 @@
                         <option value="$$">$$</option>
                         <option value="$">$</option>
                         <option value="Free">Free</option>
+                    <tr><td>Sort By:</td><td> <select name = "eprice">
+                        <option value="rating_sort">Rating</option>
+                        <option value="relevancy_sort">Relevancy</option>
+                        <option value="price_price">Price</option>
+                    </select></td></tr>
+                    <tr><td>Max Results:</td><td> <select name = "max_results">
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                         <option value="40">40</option>
+                        <option value="50">50</option>
                     </select></td></tr>
                     <table>
                         <input type="submit" value="Submit">
                     </form>
         </div>
         <div class = "half">
-            <p>some text</p>
+            <p>Welcome to Friday Night Sites, the one-stop webapp that allows you to plan your night!</p>
         </div>
         <div>
         {% block results %} {% endblock %}
-        </div> 
+        </div>
+        <footer>
+        <p>&copy; 2016, Austen Nash and Kaleb Van Gerpen</p>
+        <p>Powered by Eventful, Yelp, and Google Maps</p>
+        </footer>
     </body>
 <html>
         
