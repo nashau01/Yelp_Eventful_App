@@ -30,17 +30,15 @@ def search_yelp():
     client = Client(auth)
 
     results = client.search(parameters["both"]["location_center"], **parameters["yelp"])      #pass the params
-    #print(results)
     return results
 
 def search_eventful():
     api = eventful.API('hLdVs3LKGBLbjMfd')        #activate key
     events = api.call('/events/search', q="music", l="San Diego")
 
-    for event in events['events']['event']:
-        print (("%s at %s") % (event['title'], event['venue_name']))
+    #for event in events['events']['event']:
+    #    print (("%s at %s") % (event['title'], event['venue_name']))
 
-    print(events['events']['event'])
     return events['events']['event']
 
 def get_results():
@@ -49,12 +47,8 @@ def get_results():
 
     # parse results with ye_schedule module
 
-    print("size of yelp results is: {}".format(len(yelp_results.businesses)))
-    print("size of eventful results is: {}".format(len(eventful_results)))
-
     schedule_maker = ScheduleMaker(yelp_results, eventful_results)
 
-    print("size of options list before returning in get_results is: {}".format(len(schedule_maker.options_list)))
     return schedule_maker.options_list
 
 
@@ -121,8 +115,6 @@ def my_form_post():
 
     options_list = get_results()
 
-    print("size of options_list = " + str(len(options_list)))
-
     for an_option in options_list:
         a_dict = {}
         a_dict['event'] = an_option.activities_list[0].name
@@ -134,8 +126,6 @@ def my_form_post():
         a_dict['time'] = an_option.activities_list[0].start_time
         a_dict['cost'] = '?'
         possibilities.append(a_dict)
-
-    print("size of possibilities is: {}", len(possibilities))
 
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
     return render_template("results.html", possibilities=possibilities)#redirect('/')

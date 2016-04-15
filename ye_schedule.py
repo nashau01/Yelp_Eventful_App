@@ -51,7 +51,6 @@ class ScheduleMaker:
         self.eventful_results = eventful_results
         self.options_list = []
         self.findScheduleOptions(999)
-        print("size of options list in ScheduleMaker is: {}".format(len(self.options_list)))
 
 
     def findScheduleOptions(self, numOptions):
@@ -62,7 +61,6 @@ class ScheduleMaker:
             for j in range(NUM_DINING_OPTIONS_FOR_EACH_EVENT):
                 dining = Activity(self.yelp_results.businesses[j], "yelp")
                 activities_list = [event, dining]
-                print("appending activities: " + str(activities_list[0]) + " " + str(activities_list[1]))
                 self.options_list.append(ScheduleOption(activities_list))
 
     #Not a priority, but important
