@@ -22,12 +22,12 @@
         <div class = "half">
             <form action="/search" method = "POST">
                 <table class = "params">
-                    <tr><td>Location:</td><td><input type="text" name="location" value="e.g. Decorah, IA"></td></tr>
-                    <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value="e.g. Baseball"></td></tr>
-                    <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value = "e.g. Chinese"></td></tr>
-                    <tr><td>Maximum Distance (Miles):</td><td> <input type="text" name="distance" value="e.g. 10"></td></tr>
-                    <tr><td>Date:</td><td><input type="date" name="date" min="2016-01-01" value="e.g. 2016-04-30"></td></tr>
-                    <tr><td>Dining Price Range:</td><td> <select name = "dprice">
+                    <tr><td>Location:</td><td><input type="text" name="location" value=" "></td><td>e.g. Decorah, IA</td></tr>
+                    <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value=" "></td><td>e.g. Concerts, Sports, etc.</td></tr>
+                    <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value=" "></td><td>e.g. Chinese, Fast Food, Bar and Grill, etc. </td></tr>
+                    <tr><td>Maximum Distance (Miles):</td><td> <input type="text" name="distance" value=" "></td><td>Distance between the Event and Dining Options</td></tr>
+                    <tr><td>Date:</td><td><input type="date" name="date" min="2016-01-01"></td><td>yyyy-mm-dd</td></tr>
+                    <!---<tr><td>Dining Price Range:</td><td> <select name = "dprice">
                         <option value="$$$">$$$</option>
                         <option value="$$">$$</option>
                         <option value="$">$</option>
@@ -36,17 +36,23 @@
                         <option value="$$$">$$$</option>
                         <option value="$$">$$</option>
                         <option value="$">$</option>
-                        <option value="Free">Free</option>
+                        <option value="Free">Free</option>--->
                     <tr><td>Sort By:</td><td> <select name = "eprice">
-                        <option value="rating_sort">Rating</option>
+                        <option value="rating_sort">Popularity</option>
                         <option value="relevancy_sort">Relevancy</option>
-                        <option value="price_price">Price</option>
-                    </select></td></tr>
-                    <tr><td>Max Results:</td><td> <select name = "max_results">
+                        <option value="price_price">Date</option>
+                    </select></td><</tr>
+                    <tr><td>Event Results:</td><td> <select name = "max_results">
                         <option value="20">20</option>
                         <option value="30">30</option>
                          <option value="40">40</option>
                         <option value="50">50</option>
+                    </select></td></tr>
+                    <tr><td>Dining Results / Event:</td><td> <select name = "mdining_results">
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
                     </select></td></tr>
                     <table>
                         <input type="submit" value="Submit">
@@ -59,7 +65,7 @@
         {% block results %} {% endblock %}
         </div>
         <footer>
-        <p>&copy; 2016, Austen Nash and Kaleb Van Gerpen</p>
+        <p>&copy; 2016, Austin Nash and Kaleb Van Gerpen</p>
         <p>Powered by Eventful, Yelp, and Google Maps</p>
         </footer>
     </body>
