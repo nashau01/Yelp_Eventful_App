@@ -1,24 +1,102 @@
 {% extends "index.html" %}
 {% block results %}
 
-<p>Hello World</p>
-<p>{{ variable }}</p>
+<script>
+    
+    function initialize() {
+        
+         {% for possibility in possibilities %}
+                var myCenter = new google.maps.LatLng({{possibility.lat}},{{possibility.lng}})
+         
+                var {{possibility.mapprop}} = {
+                    center:myCenter,
+                    zoom:8,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP
+                    
+                };
+                
+                var {{possibility.mapno}} = new google.maps.Map(document.getElementById("{{possibility.id}}"), {{possibility.mapprop}});
+                
+                var loc = new google.maps.LatLng({{possibility.lat}},{{possibility.lng}});
+                
+                var {{possibility.center}} = new google.maps.Marker({position:loc,});
+                
+                {{possibility.center}}.setMap({{possibility.mapno}});
+                
+                var con = "{{possibility.event}}: ".concat("{{possibility.description}}")
+                
+                var {{possibility.info}} = new google.maps.InfoWindow({content:con});
+                
+                google.maps.event.addListener({{possibility.center}}, 'click', function() {
+                {{possibility.info}}.open({{possibility.mapno}}, {{possibility.center}});
+                });
+                
+                
+                {% for result in possibility.dining %}
+                 
+                     var loc = new google.maps.LatLng({{result.lat}},{{result.lng}});
+                     
+                     var {{result.marker}} = new google.maps.Marker({position:loc,});
+                     
+                     {{result.marker}}.setMap({{possibility.mapno}});
+                     
+                     var con = "{{result.name}}: "
+                     
+                     var {{result.info}} = new google.maps.InfoWindow({content:con});
+                     
+                     google.maps.event.addListener({{result.marker}}, 'click', function() {
+                     {{result.info}}.open({{possibility.mapno}}, {{result.marker}});
+                     });
+                
+                {% endfor %}
+         
+         {% endfor %}
+    }
 
-<table>
+    </script>
 
 {% for possibility in possibilities %}
+    <table class="results">
     <tr>
-        <td>{{possibility.event}}</td>
-        <td>{{ possibility.dining}}</td>
-        <td>{{ possibility.date}}</td>
-        <td>{{ possibility.time}}</td>
+        <td class="event_title" colspan=1>{{possibility.event}}</td>
+        <td class="event_details" colspan=1>{{possibility.venue}}</td>
+        <td class="event_details" colspan=1>{{possibility.city}}</td>
+        <td class="event_details" colspan=1>{{ possibility.time}}</td>
+        <td class="event_details" colspan=1>{{ possibility.date}}</td>
+    </tr>
+    <tr>
+        <td class="event_description" colspan=5><p class="results">{{possibility.description}}</p></td>
+    </tr>
+    <tr>
+        <td><h3>Dining Options</h3></td>
+    </tr>
+    <tr>
+        <td class="dining_options" colspan=1>
+            <table>
+                {% for result in possibility.dining %}
+                    <tr>
+                        <td class="dining_info">{{ result.name }} | {{result.address}} | {{result.price}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+        </br>
+        <td colspan=7>
+            <div id="{{possibility.id}}" style="width: 100%;height:200px;"></div>
+        
+ 
+        </td>
     </tr>
 {% else %}
 <tr><td>Sorry. No Results.</td></tr>
-{% endfor %}
-<table>
-    
-<p>Hello Again</p>
-    
-{% endblock %}
 
+{% endfor %}
+
+<table>
+
+<script> google.maps.event.addDomListener(window, 'load', initialize); </script>
+
+<p>{{possibilities|length}} Results </p>
+
+
+{% endblock %}

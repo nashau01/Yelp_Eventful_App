@@ -9,6 +9,7 @@
 # yelp search params: https://www.yelp.com/developers/documentation/v2/search_api
 
 
+
 ##### Imports #####
 
 import eventful
@@ -17,8 +18,10 @@ from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 import io
 import json
-import ye_schedule
+from ye_schedule import *
 from flask import Flask, request, render_template, redirect
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map
 
 
 ##### Called Functions #####
@@ -45,6 +48,35 @@ def get_results():
     # return results
     pass
 
+
+def unique(scount):
+    clist = scount.split()
+    print(clist)
+    so = ""
+    for l in clist:
+        if l == "0":
+            so += "zero"
+        elif l == "1":
+            so += "one"
+        elif l == "2":
+            so += "two"
+        elif l == "3":
+            so += "three"
+        elif l == "4":
+            so += "four"
+        elif l == "5":
+            so += "five"
+        elif l == "6":
+            so += "six"
+        elif l == "7":
+            so += "seven"
+        elif l == "8":
+            so += "eight"
+        elif l == "9":
+            so += "nine"
+        print("so:", so)
+
+    return so
 
 
 #### Initialize Parameter Dictionaries #####
@@ -75,9 +107,12 @@ parameters["yelp"] = {
 }
 
 
+
+
 ##### App Control #####
 
 app = Flask(__name__)
+GoogleMaps(app)
 
 @app.route('/')
 def landing_page():
@@ -86,6 +121,8 @@ def landing_page():
 @app.route('/reset', methods = ['POST'])
 def reset():
     return render_template("index.html")
+
+#@app.route('more', methods = ['POST'])
 
 @app.route('/search', methods = ['GET', 'POST'])
 def my_form_post():
@@ -99,14 +136,50 @@ def my_form_post():
     parameters["both"]["location_center"] = request.form['location']
     
     sample_dict = {
-            'event': 'Baseball Game',
-            'dining' :'Waffle House',
+            'event' : 'Baseball Game',
+            'dining' : [{'name' : 'Waffle House', 'address' : '106 North Ave., Minneapolis, MN', 'price' : '$', 'lat' : 44.968046, 'lng' : -94.420307}, {'name' : 'Perkin\'s', 'address' :'3000 Busy Rd., Minneapolis, MN', 'price' : '$$', 'lat' : 44.33328, 'lng' : -89.132008}, {'name' : 'IHOP', 'address' : '720 Long St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.755787 , 'lng' : -116.359998}, {'name' : 'Denny\'s', 'address' : '404 Error St., Minneapolis, MN', 'price' : '$$', 'lat' : 33.844843 , 'lng' : -116.54911}],
             'date' : '2016-04-15',
+            'lat' : 44.92057,
+            'lng' : -93.44786,
             'time' : '6:00pm',
-            'cost' : '$$$'
-        }
+            'cost' : '$$$',
+            'venue' : 'Baseball Field',
+            'city' : 'Minneapolis, MN',
+            'description' : "Baseball is a bat-and-ball game played between two teams of nine players each who take turns batting and fielding.The batting team attempts to score runs by hitting a ball that is thrown by the pitcher with a bat swung by the batter, then running counter-clockwise around a series of four bases: first, second, third, and home plate. A run is scored when a player advances around the bases and returns to home plate.Players on the batting team take turns hitting against the pitcher of the fielding team, which tries to prevent runs by getting hitters out in any of several ways. A player on the batting team who reaches a base safely can later attempt to advance to subsequent bases during teammates' turns batting, such as on a hit or by other means. The teams switch between batting and fielding whenever the fielding team records three outs. One turn batting for both teams, beginning with the visiting team, constitutes an inning. A game comprises nine innings, and the team with the greater number of runs at the end of the game wins. Baseball is the only major team sport in America with no game clock, although almost all games end in the ninth inning.Evolving from older bat-and-ball games, an early form of baseball was being played in England by the mid-18th century. This game was brought by immigrants to North America, where the modern version developed. By the late 19th century, baseball was widely recognized as the national sport of the United States. Baseball is now popular in North America and parts of Central and South America, the Caribbean, and East Asia.  In the United States and Canada, professional Major League Baseball (MLB) teams are divided into the National League (NL) and American League (AL), each with three divisions: East, West, and Central. The major league champion is determined by playoffs that culminate in the World Series. The top level of play is similarly split in Japan between the Central and Pacific Leagues and in Cuba between the West League and East League."
+            
+            }
+
     possibilities = []
     possibilities.append(sample_dict)
+
+
+    for i in range(0,19):
+        possibilities.append(sample_dict.copy())
+    
+    count = 1
+    for dict in possibilities:
+        scount = str(count)
+        dict['id'] = "id" + scount
+        dict['mapno'] = "map" + scount
+        dict['mapprop'] = "mp" + scount
+        dict['center'] = "center" + scount
+        dict['info'] = "info" + scount
+        for item in dict['dining']:
+            item['marker'] = "marker" + str(count * 2)
+            item['info'] = "dinfo" + str(count * 2) 
+            count += 1
+        
+        
+        
+        #print(item['mv'])
+        
+        count += 1
+        print(count)
+        print(dict['id'])
+
+    
+    for dict in possibilities:
+        print(dict['id'])
     
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
     get_results()
