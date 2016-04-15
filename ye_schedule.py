@@ -34,7 +34,7 @@ class Activity:
 class ScheduleOption:
     def __init__(self, activities_list):
         self.score = 0
-        self.activity_list = activities_list
+        self.activities_list = activities_list
         self.calculateScore()
 
     def calculateScore(self):
@@ -42,7 +42,7 @@ class ScheduleOption:
         pass
 
     def __str__(self):
-        return "" + str(self.activities_list[0]) + ", " + str(self.activity_list[1].name)
+        return "" + str(self.activities_list[0]) + ", " + str(self.activities_list[1].name)
 
 
 class ScheduleMaker:
@@ -51,10 +51,11 @@ class ScheduleMaker:
         self.eventful_results = eventful_results
         self.options_list = []
         self.findScheduleOptions(999)
-        print("initialized a ScheduleMaker object")
+        print("size of options list in ScheduleMaker is: {}".format(len(self.options_list)))
+
 
     def findScheduleOptions(self, numOptions):
-        options_list = []
+        self.options_list = []
         #Create a pair of activities for each of the combinations of one result from yelp and one from eventful
         for i in range(NUM_EVENTS_LISTED):
             event = Activity(self.eventful_results[i], "eventful")
@@ -62,7 +63,7 @@ class ScheduleMaker:
                 dining = Activity(self.yelp_results.businesses[j], "yelp")
                 activities_list = [event, dining]
                 print("appending activities: " + str(activities_list[0]) + " " + str(activities_list[1]))
-                options_list.append(ScheduleOption(activities_list))
+                self.options_list.append(ScheduleOption(activities_list))
 
     #Not a priority, but important
     def orderOptions(self):

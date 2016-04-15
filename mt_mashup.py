@@ -127,7 +127,10 @@ def my_form_post():
         a_dict = {}
         a_dict['event'] = an_option.activities_list[0].name
         a_dict['dining'] = an_option.activities_list[1].name
-        a_dict['date'] = an_option.activities_list[0].date
+        """ To implement date: assign the date attribute in the Activity constructor
+        based on the format specified (by the API docs) for the date in a yelp/eventful result object
+        """
+        a_dict['date'] = "unimplemented"
         a_dict['time'] = an_option.activities_list[0].start_time
         a_dict['cost'] = '?'
         possibilities.append(a_dict)
