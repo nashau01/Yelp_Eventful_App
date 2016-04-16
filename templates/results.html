@@ -10,7 +10,7 @@
          
                 var {{possibility.mapprop}} = {
                     center:myCenter,
-                    zoom:8,
+                    zoom:12,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
                     
                 };
@@ -58,11 +58,10 @@
 {% for possibility in possibilities %}
     <table class="results">
     <tr>
-        <td class="event_title" colspan=1>{{possibility.event}}</td>
+        <td class="event_title" colspan=2>{{possibility.event}}</td>
         <td class="event_details" colspan=1>{{possibility.venue}}</td>
         <td class="event_details" colspan=1>{{possibility.city}}</td>
         <td class="event_details" colspan=1>{{ possibility.time}}</td>
-        <td class="event_details" colspan=1>{{ possibility.date}}</td>
     </tr>
     <tr>
         <td class="event_description" colspan=5><p class="results">{{possibility.description}}</p></td>
@@ -75,7 +74,7 @@
             <table>
                 {% for result in possibility.dining %}
                     <tr>
-                        <td class="dining_info">{{ result.name }} | {{result.address}} | {{result.price}}</td>
+                        <td class="dining_info">{{ result.name }} | {{result.address}} | {{result.phone}} | {{result.rating}}</td>
                     </tr>
                 {% endfor %}
             </table>
