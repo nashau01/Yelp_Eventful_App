@@ -7,25 +7,29 @@
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCGDa_1ERiA7foJjGsELWkHyZ1_SQTiXg
                 &libraries=visualization&callback=initMap">
                 </script>
-</script>
     </head>
     <body>
         <header>
             <h1>Friday Night Sites</h1>
         </header>
-        <div class = "half">
-            <form action="/reset" method = "POST">
-                <input type="submit" value="Reset">
-            </form>
-        </div>
-                
+
         <div class = "half">
             <form action="/search" method = "POST">
                 <table class = "params">
                     <tr><td>Location:</td><td><input type="text" name="location" value=" "></td><td>e.g. Decorah, IA</td></tr>
                     <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value=" "></td><td>e.g. Concerts, Sports, etc.</td></tr>
                     <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value=" "></td><td>e.g. Chinese, Fast Food, Bar and Grill, etc. </td></tr>
-                    <tr><td>Maximum Distance (Miles):</td><td> <input type="text" name="distance" value=" "></td><td>Distance between the Event and Dining Options</td></tr>
+                    <tr><td>Max Distance:</td>
+                    <td><select name = "radius_filter">
+                        <option value="40000">40,000</option>
+                        <option value="30000">30,000</option>
+                        <option value="20000">20,000</option>
+                        <option value="10000">10,000</option>
+                        <option value="5000">5000</option>
+                        <option value="1000">1000</option>
+                    </select><td>Distance between Event and Dining
+                    </td>
+                    </tr>
                     <tr><td>Date:</td><td><input type="date" name="date" min="2016-01-01"></td><td>yyyy-mm-dd</td></tr>
                     <!---<tr><td>Dining Price Range:</td><td> <select name = "dprice">
                         <option value="$$$">$$$</option>
@@ -37,12 +41,16 @@
                         <option value="$$">$$</option>
                         <option value="$">$</option>
                         <option value="Free">Free</option>--->
-                    <tr><td>Sort By:</td><td> <select name = "eprice">
-                        <option value="rating_sort">Popularity</option>
-                        <option value="relevancy_sort">Relevancy</option>
-                        <option value="price_price">Date</option>
-                    </select></td><</tr>
+                    <tr><td>Sort By:</td><td>
+                        <select name = "esort">
+                            <option value="popularity">Popularity</option>
+                            <option value="relevancy">Relevancy</option>
+                            <option value="date">Date</option>
+                    </select>
                     <tr><td>Event Results:</td><td> <select name = "max_results">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
                          <option value="40">40</option>
@@ -59,7 +67,12 @@
                     </form>
         </div>
         <div class = "half">
-            <p>Welcome to Friday Night Sites, the one-stop webapp that allows you to plan your night!</p>
+            <form action="/reset" method = "POST">
+                <input type="submit" value="Reset">
+                    </form>
+        </div>
+        <div class = "half">
+            <p>Welcome to Friday Night Sites, the one-stop webapp that allows you to plan your nights!</p>
         </div>
         <div>
         {% block results %} {% endblock %}
@@ -67,6 +80,7 @@
         <footer>
         <p>&copy; 2016, Austin Nash and Kaleb Van Gerpen</p>
         <p>Powered by Eventful, Yelp, and Google Maps</p>
+        <p>Disclaimer: Results are Displayed, Not Verified</p>
         </footer>
     </body>
 <html>

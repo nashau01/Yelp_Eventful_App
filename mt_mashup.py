@@ -26,17 +26,16 @@ from flask import Flask, request, render_template, redirect
 def search_eventful():
     api = eventful.API('hLdVs3LKGBLbjMfd')        #activate key
 
-    events = api.call('/events/search', keywords=parameters["eventful"]["keywords"], location=parameters["both"]["location_center"], date=parameters["both"]["date"], )
+    events = api.call('/events/search', keywords=parameters["eventful"]["keywords"], location=parameters["both"]["location_center"], date=parameters["both"]["date"], page_size=parameters["eventful"]["results"])
     #for event in events['events']['event']:
     #    print (("%s at %s") % (event['title'], event['venue_name']))
-
 
     return events['events']['event']
 
 def get_results():
     eventful_results = search_eventful()
     # parse results with ye_schedule module
-    schedule_maker = ScheduleMaker(eventful_results, 5, 4, parameters["yelp"])
+    schedule_maker = ScheduleMaker(eventful_results, parameters["both"]["dining_results"], parameters["yelp"])
     return schedule_maker.options_list
 
 #### Initialize Parameter Dictionaries #####
@@ -50,20 +49,23 @@ parameters["both"] = {
     "location_radius" : 0,
     "date" : None,  #date(),
     "time_frame" : (0,0) #(min_start_time, max_end_time)
+
 }
 
 parameters["eventful"] = {
     "keywords" : "",
     "category" : "",
     "sort_order" : "",
-    "price_range" : None
+    "price_range" : None,
+    "results" : 5
 }
 
 parameters["yelp"] = {
-    "term" : "", #(keywords, e.g. "food", "restaurants")
+    "term" : "food", #(keywords, e.g. "food", "restaurants")
     #"sort" : None, #(similar to eventful sort order, e.g. "Best Matched", "Highest Rated")
     #"category_filter" : "", #(internal, based on type of activity/entertainment)
     #"price_range" : None
+    "radius_filter" : None
 }
 
 ##### App Control #####
@@ -78,22 +80,30 @@ def landing_page():
 def reset():
     return render_template("index.html")
 
-#@app.route('more', methods = ['POST'])
-
 @app.route('/search', methods = ['GET', 'POST'])
 def my_form_post():
     location = request.form['location']
-    parameters["eventful"]["keywords"] = request.form['etype']
-    parameters["yelp"]["term"] = request.form['dtype']
+    parameters["eventful"]["keywords"] = request.form['etype'] 
+    parameters["yelp"]["term"] = request.form['dtype'] + "food"
     parameters["both"]["date"] = request.form['date']
     #parameters["eventful"]["price_range"] = request.form['eprice']
     #parameters["yelp"]["price_range"] = request.form['dprice']
     parameters["both"]["location_center"] = request.form['location']
+    parameters["yelp"]["radius_filter"] =  request.form['radius_filter']
+    parameters["eventful"]["results"] = request.form['max_results']
+    parameters["both"]["dining_results"] = int(request.form['mdining_results'])
+    
     
     possibilities = []
     #possibilities.append(sample_dict)
+    
+    
+    try:
 
-    options_list = get_results()
+        options_list = get_results()
+    
+    except:
+        return render_template("sorry.html")
 
     print("size of options_list = " + str(len(options_list)))
 
@@ -140,6 +150,8 @@ def my_form_post():
         count += 1
 
         possibilities.append(a_dict)
+    
+        print(a_dict) 
 
     #possibilities = get_results()   #will be based to browser and iterated over to display possible "plans". Should be a list of dictionaries.
     return render_template("results.html", possibilities=possibilities)#redirect('/')
