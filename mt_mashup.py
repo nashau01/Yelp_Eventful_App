@@ -30,7 +30,6 @@ def search_eventful():
     #for event in events['events']['event']:
     #    print (("%s at %s") % (event['title'], event['venue_name']))
 
-
     return events['events']['event']
 
 def get_results():

@@ -4,9 +4,17 @@ from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
 class Location:
-    def __init__(self, type, yelp_loc_obj=None, dictionary=None, address=None):
-        #parse location data based on type
-        pass
+    def __init__(self, type, object):
+        if type == "yelp":
+            loc_data = object.location
+            self.latitude = loc_data.coordinate.latitude
+            self.longitude = loc_data.coordinate.longitude
+            self.address = loc_data.address[0]
+
+        elif type == "eventful":
+            self.latitude = object['latitude']
+            self.longitude = object['longitude']
+            self.address = object['venue_address']
 
 class Activity:
     def __init__(self, object, type_str):
@@ -15,7 +23,7 @@ class Activity:
         if self.type_str == "yelp":
             self.object = object
             self.name = object.name
-            self.location = Location("yelp", object.location)
+            self.location = Location("yelp", object)
             self.address = object.location.address[0] + ", " + object.location.city + ", " + object.location.state_code
             self.phone = object.display_phone[3:]
             self.rating = object.rating
@@ -26,7 +34,7 @@ class Activity:
             #similar to above but for an eventful object
             self.object = object
             self.name = object['title']
-            self.location = Location("address", dictionary=object['venue_address'])
+            self.location = Location("eventful", object)
             self.start_time = object['start_time']
             self.end_time = object['stop_time']
             self.venue = object['venue_name'] + ", " + object['venue_address'] + ", " + object['city_name'] + ", " + object['region_name']

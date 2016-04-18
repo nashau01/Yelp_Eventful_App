@@ -4,7 +4,7 @@ h1, h2, h3, h4, h5, p, li, td, ul, ol{
 }
 
 body {
-    background-color: teal;
+    background-color: lightblue;
 }
 
 h1 {
@@ -22,14 +22,14 @@ table.params {
 }
 
 td.event_title {
-    color: yellow;
+    color: darkslategray;
     font-size: 20pt;
     padding-right: 10px;
 
 }
 
 td.event_details {
-    color:yellow;
+    color:darkslategray;
     font-size: 10pt;
     padding-right: 10px;
     text-align: center;
@@ -43,15 +43,17 @@ td.event_description {
 
 td.dining_options {
     font-size: 12pt;
-    color: yellow;
+    color: darkslategray;
+    border: 1px solid black;
     
 }
 
 
 td.dining_info {
     font-size: 12pt;
-    color: yellow;
+    color: darkslategray;
     text-align: center;
+    border: 1px solid black;
 }
 
 div#googleMap {
@@ -67,7 +69,7 @@ p.results {
 }
 
 li {
-    color:yellow;
+    color:darkslategray;
     font-size: 12pt;
 }
 
