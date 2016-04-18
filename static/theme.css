@@ -22,14 +22,14 @@ table.params {
 }
 
 td.event_title {
-    color: darkslategray;
+    color: lightpurple;
     font-size: 20pt;
     padding-right: 10px;
 
 }
 
 td.event_details {
-    color:darkslategray;
+    color:lightpurple;
     font-size: 10pt;
     padding-right: 10px;
     text-align: center;
@@ -43,15 +43,14 @@ td.event_description {
 
 td.dining_options {
     font-size: 12pt;
-    color: darkslategray;
     border: 1px solid black;
-    
+    color: lightpurple;
 }
 
 
 td.dining_info {
     font-size: 12pt;
-    color: darkslategray;
+    color: lightpurple;
     text-align: center;
     border: 1px solid black;
 }
@@ -69,7 +68,7 @@ p.results {
 }
 
 li {
-    color:darkslategray;
+    color:lightpurple;
     font-size: 12pt;
 }
 

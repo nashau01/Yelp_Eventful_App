@@ -63,10 +63,10 @@ class EventAndDiningPair:
 
 
 class ScheduleMaker:
-    def __init__(self, eventful_results, num_events_listed, num_dining_opts_per_event, yelp_params):
+    def __init__(self, eventful_results, num_dining_opts_per_event, yelp_params):
         self.eventful_results = eventful_results
         self.options_list = []
-        self.num_events_listed = num_events_listed
+        #self.num_events_listed = num_events_listed
         self.num_dining_opts_per_event = num_dining_opts_per_event
         self.yelp_params = yelp_params
         self.findScheduleOptions()
@@ -74,12 +74,12 @@ class ScheduleMaker:
     def findScheduleOptions(self):
         self.options_list = []
         #Create a pair of activities for each of the combinations of one result from yelp and one from eventful
-        for i in range(self.num_events_listed):
+        for i in self.eventful_results:
            
-            event_activity = Activity(self.eventful_results[i], "eventful")
+            event_activity = Activity(i, "eventful")
             
-            lat = self.eventful_results[i]['latitude']  #
-            lng = self.eventful_results[i]['longitude']  #
+            lat = i['latitude']  #
+            lng = i['longitude']  #
             dining_activities = []
     
             auth = Oauth1Authenticator(consumer_key = "mvC1SY7wAUx_RPlVhG-fIw",consumer_secret = "vkqWVoowxsWkUu7KU0t2Pj3qY1k",token =  "syYEIdwvGt-uLGdgVmu9ZsQfE98CROe4", token_secret = "AQLQnKJA7VYw4XlVIMK7hYzSwDo") #
