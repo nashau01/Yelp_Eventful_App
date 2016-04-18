@@ -6,8 +6,9 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCGDa_1ERiA7foJjGsELWkHyZ1_SQTiXg
                 &libraries=visualization&callback=initMap">
-                </script>
-</script>
+            </script>
+        </script>
+
     </head>
     <body>
         <header>
@@ -18,7 +19,7 @@
                 <input type="submit" value="Reset">
             </form>
         </div>
-                
+
         <div class = "half">
             <form action="/search" method = "POST">
                 <table class = "params">
@@ -43,6 +44,8 @@
                         <option value="price_price">Date</option>
                     </select></td><</tr>
                     <tr><td>Event Results:</td><td> <select name = "max_results">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
                          <option value="40">40</option>
