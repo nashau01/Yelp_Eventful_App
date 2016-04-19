@@ -15,20 +15,13 @@
         </header>
 
         <div class = "half">
-            <form action="/reset" method = "POST">
-                <input type="submit" value="Reset">
-            </form>
-        </div>
-
-
-        <div class = "half">
             <form action="/search" method = "POST">
                 <table class = "params">
-                    <tr><td>Location:</td><td><input type="text" name="location" value=" "></td><td>e.g. Decorah, IA</td></tr>
+                    <tr><td>Location:</td><td><input type="text" name="location" value=" "></td><td> Required. e.g. Decorah, IA</td></tr>
                     <tr><td>Entertainment Type:</td><td> <input type="text" name="etype" value=" "></td><td>e.g. Concerts, Sports, etc.</td></tr>
                     <tr><td>Dining Type:</td><td> <input type="text" name="dtype" value=" "></td><td>e.g. Chinese, Fast Food, Bar and Grill, etc. </td></tr>
 
-                    <tr><td>Max Distance Between Event and Dining (meters):</td>
+                    <tr><td>Max Distance (meters):</td>
 
                     <td><select name = "radius_filter">
                         <option value="40000">40,000</option>
@@ -50,14 +43,14 @@
                         <option value="$$$">$$$</option>
                         <option value="$$">$$</option>
                         <option value="$">$</option>
-                        <option value="Free">Free</option>--->
+                        <option value="Free">Free</option>-
                     <tr><td>Sort By:</td><td>
                         <select name = "esort">
                             <option value="popularity">Popularity</option>
                             <option value="relevancy">Relevancy</option>
                             <option value="date">Date</option>
-                    </select>
-                    <tr><td>Event Results:</td><td> <select name = "max_results">
+                    </select>-->
+                    <tr><td>Max Event Results:</td><td> <select name = "max_results">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -66,7 +59,7 @@
                          <option value="40">40</option>
                         <option value="50">50</option>
                     </select></td></tr>
-                    <tr><td>Dining Results / Event:</td><td> <select name = "mdining_results">
+                    <tr><td>Max Dining Results / Event:</td><td> <select name = "mdining_results">
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>

@@ -4,7 +4,7 @@ h1, h2, h3, h4, h5, p, li, td, ul, ol{
 }
 
 body {
-    background-color: lightblue;
+    background-color: lightgoldenrodyellow;
 }
 
 h1 {
@@ -79,7 +79,16 @@ ul.top {
 footer {
     text-align: center;
     font-style: italic;
-    margin-bottom: 0px; 
+
+    width: 100%;
+    position: fixed;
+    background-color: white;
+    bottom: 110x;
+    height: 110px;
+    clear: both;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(158, 164, 184);
     
 }
 
