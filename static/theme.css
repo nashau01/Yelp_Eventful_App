@@ -43,8 +43,8 @@ td.event_description {
 
 td.dining_options {
     font-size: 12pt;
+    border: 1px solid black;
     color: lightpurple;
-    
 }
 
 
@@ -52,6 +52,7 @@ td.dining_info {
     font-size: 12pt;
     color: lightpurple;
     text-align: center;
+    border: 1px solid black;
 }
 
 div#googleMap {

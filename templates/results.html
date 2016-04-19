@@ -72,9 +72,13 @@
     <tr>
         <td class="dining_options" colspan=1>
             <table>
+                <tr> <th>Restaurant</th> <th>Address</th> <th>Phone Number</th> <th>Rating (Out of 5)</th> </tr>
                 {% for result in possibility.dining %}
                     <tr>
-                        <td class="dining_info">{{ result.name }} | {{result.address}} | {{result.phone}} | {{result.rating}}</td>
+                        <td class="dining_info"> {{ result.name }} </td>
+                        <td class="dining_info"> {{result.address}} </td>
+                        <td class="dining_info"> {{result.phone}} </td>
+                        <td class="dining_info"> {{result.rating}} </td>
                     </tr>
                 {% endfor %}
             </table>
