@@ -35,7 +35,7 @@ def search_eventful():
 def get_results():
     eventful_results = search_eventful()
     # parse results with ye_schedule module
-    schedule_maker = ScheduleMaker(eventful_results, parameters["both"]["dining_results"], parameters["yelp"])
+    schedule_maker = ScheduleMaker(eventful_results, parameters["yelp"])
     return schedule_maker.options_list
 
 #### Initialize Parameter Dictionaries #####
@@ -65,7 +65,8 @@ parameters["yelp"] = {
     #"sort" : None, #(similar to eventful sort order, e.g. "Best Matched", "Highest Rated")
     #"category_filter" : "", #(internal, based on type of activity/entertainment)
     #"price_range" : None
-    "radius_filter" : None
+    "radius_filter" : None,
+    "limit" : 3
 }
 
 ##### App Control #####
@@ -84,14 +85,15 @@ def reset():
 def my_form_post():
     location = request.form['location']
     parameters["eventful"]["keywords"] = request.form['etype'] 
-    parameters["yelp"]["term"] = request.form['dtype'] + "food"
+    parameters["yelp"]["term"] = request.form['dtype'] + " food"
     parameters["both"]["date"] = request.form['date']
     #parameters["eventful"]["price_range"] = request.form['eprice']
     #parameters["yelp"]["price_range"] = request.form['dprice']
     parameters["both"]["location_center"] = request.form['location']
     parameters["yelp"]["radius_filter"] =  request.form['radius_filter']
     parameters["eventful"]["results"] = request.form['max_results']
-    parameters["both"]["dining_results"] = int(request.form['mdining_results'])
+    parameters["yelp"]["limit"] = int(request.form['mdining_results'])
+    print("max dining:", parameters["yelp"]["limit"])
     
     
     possibilities = []
@@ -100,7 +102,7 @@ def my_form_post():
     
     try:
 
-        options_list = get_results()
+    options_list = get_results()
     
     except:
         return render_template("sorry.html")

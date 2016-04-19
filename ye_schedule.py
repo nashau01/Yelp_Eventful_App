@@ -55,30 +55,33 @@ class EventAndDiningPair:
 
 
 class ScheduleMaker:
-    def __init__(self, eventful_results, num_dining_opts_per_event, yelp_params):
+    def __init__(self, eventful_results, yelp_params):
         self.eventful_results = eventful_results
         self.options_list = []
         #self.num_events_listed = num_events_listed
-        self.num_dining_opts_per_event = num_dining_opts_per_event
+        #self.num_dining_opts_per_event = num_dining_opts_per_event
         self.yelp_params = yelp_params
         self.findScheduleOptions()
     
     def findScheduleOptions(self):
         self.options_list = []
         #Create a pair of activities for each of the combinations of one result from yelp and one from eventful
-        for i in self.eventful_results:
+        for an_event in self.eventful_results:
            
-            event_activity = Activity(i, "eventful")
+            event_activity = Activity(an_event, "eventful")
             
-            lat = i['latitude']  #
-            lng = i['longitude']  #
+            lat = an_event['latitude']  #
+            lng = an_event['longitude']  #
             dining_activities = []
     
             auth = Oauth1Authenticator(consumer_key = "mvC1SY7wAUx_RPlVhG-fIw",consumer_secret = "vkqWVoowxsWkUu7KU0t2Pj3qY1k",token =  "syYEIdwvGt-uLGdgVmu9ZsQfE98CROe4", token_secret = "AQLQnKJA7VYw4XlVIMK7hYzSwDo") #
             client = Client(auth)  #
             
+            print("yelp params", self.yelp_params)
+            
             yelp_results = client.search_by_coordinates(lat, lng, **self.yelp_params)
-            for j in range(self.num_dining_opts_per_event):
+            print(len(yelp_results.businesses))
+            for j in range(len(yelp_results.businesses)):
                 #print(location.businesses[j])
                 #print(self.yelp_results.businesses[j])
                 dining = Activity(yelp_results.businesses[j], "yelp")
