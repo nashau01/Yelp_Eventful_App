@@ -100,12 +100,12 @@ def my_form_post():
     #possibilities.append(sample_dict)
     
     
-    try:
+    #try:
 
-        options_list = get_results()
+    options_list = get_results()
     
-    except:
-        return render_template("sorry.html")
+    #except:
+    #    return render_template("sorry.html")
 
     print("size of options_list = " + str(len(options_list)))
 
@@ -120,13 +120,10 @@ def my_form_post():
             a_dining_dict['address'] = a_dining_option.address
             a_dining_dict['phone'] = a_dining_option.phone 
             a_dining_dict['lat'] = a_dining_option.lat
-            a_dining_dict['lng'] = a_dining_option.lng 
+            a_dining_dict['lng'] = a_dining_option.lng
             a_dining_dict['rating'] = a_dining_option.rating
             a_dict['dining'].append(a_dining_dict)
 
-        """ To implement date: assign the date attribute in the Activity constructor
-        based on the format specified (by the API docs) for the date in a yelp/eventful result object
-        """
         a_dict['date'] = "unimplemented"
         a_dict['time'] = an_option.event_activity.start_time
         a_dict['cost'] = '?'

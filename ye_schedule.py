@@ -2,6 +2,7 @@ import yelp
 import eventful
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
+from flask import current_app
 
 class Location:
     def __init__(self, type, object):
@@ -75,7 +76,6 @@ class ScheduleMaker:
         self.options_list = []
         #Create a pair of activities for each of the combinations of one result from yelp and one from eventful
         for an_event in self.eventful_results:
-           
             event_activity = Activity(an_event, "eventful")
             
             lat = an_event['latitude']  #
