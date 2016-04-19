@@ -102,7 +102,7 @@ def my_form_post():
     
     try:
 
-    options_list = get_results()
+        options_list = get_results()
     
     except:
         return render_template("sorry.html")
